@@ -1,0 +1,59 @@
+experiment_name: "prosodic_behavior_classification"
+datasets:
+  - "ravdess"
+  - "crema_d"
+  - "savee"
+data_dir: "./data"
+results_dir: "./results"
+seed: 42
+
+preprocessing:
+  target_sr: 16000
+  normalize_loudness: true
+  trim_silence: true
+  vad_threshold: 0.01
+  noise_reduction: true
+  max_length_seconds: 10.0
+  chunk_long_utterances: false
+  chunk_size_seconds: 5.0
+
+feature_extraction:
+  extract_prosodic: true
+  extract_spectral: true
+  extract_mfcc: true
+  extract_formants: true
+  mfcc_n_coeffs: 13
+  frame_length: 2048
+  hop_length: 512
+
+model:
+  model_type: "logistic_regression"
+  random_state: 42
+  test_size: 0.2
+  val_size: 0.1
+  cv_folds: 5
+  speaker_independent: true
+  cross_dataset_eval: false
+  
+  logistic_regression:
+    C: 1.0
+    class_weight: "balanced"
+    max_iter: 1000
+  
+  svm:
+    C: 1.0
+    class_weight: "balanced"
+    max_iter: 1000
+  
+  random_forest:
+    n_estimators: 100
+    max_depth: 10
+    min_samples_split: 5
+    class_weight: "balanced"
+  
+  xgboost:
+    n_estimators: 100
+    max_depth: 5
+    learning_rate: 0.1
+    early_stopping_rounds: 10
+
